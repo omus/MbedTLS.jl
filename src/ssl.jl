@@ -43,11 +43,13 @@ end
 
 macro lockdata(ctx, expr)
     esc(quote
+        println(string("lock: ", $ctx.datalock))
         lock($ctx.datalock)
         @assert $ctx.datalock.reentrancy_cnt == 1
         try
             $expr
         finally
+            println(string("unlock: ", $ctx.datalock))
             unlock($ctx.datalock)
         end
     end)
